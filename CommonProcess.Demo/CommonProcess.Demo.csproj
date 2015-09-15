@@ -50,8 +50,6 @@
     <Compile Include="OperateDependentFactory\OperateDependentLocator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlStatment.cs" />
-    <Compile Include="StringBuilderExtend.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonProcess\CommonProcess.csproj">
