@@ -3,89 +3,108 @@ using CommonProcess.Error;
 
 namespace CommonProcess
 {
+    /// <summary>
+    /// 底层核心操作类
+    /// </summary>
     public abstract class CoreProcess
     {
-        public bool HasError { get; set; }
-        
-        public int ErrorCode { get; set; }
-        
-        public string ErrorMessage { get; set; }
-        
+        private bool _hasError;
+        /// <summary>
+        /// 是否捕捉错误
+        /// </summary>
+        public bool HasError { get { return this._hasError; } }
+
+        private int? _errorCode;
+        /// <summary>
+        /// 错误编码
+        /// </summary>
+        public int? ErrorCode { get { return this._errorCode; } }
+
+        private string _errorMessage;
+        /// <summary>
+        /// 错误信息
+        /// </summary>
+        public string ErrorMessage { get { return this._errorMessage; } }
+
+        /// <summary>
+        /// 捕捉错误相关信息
+        /// </summary>
+        /// <param name="errorCode">错误编码</param>
+        /// <param name="errorMessage">错误信息</param>
         protected void CacheError(int errorCode, string errorMessage)
         {
-            this.HasError = true;
+            this._hasError = true;
 
-            this.ErrorCode = errorCode;
-            this.ErrorMessage = errorMessage;
+            this._errorCode = errorCode;
+            this._errorMessage = errorMessage;
         }
 
-        protected void CacheError(ErrorCode errorCode, params object[] args)
+        /// <summary>
+        /// 捕捉错误相关信息
+        /// </summary>
+        /// <param name="errorCode">错误编码枚举</param>
+        protected void CacheError(ErrorCode errorCode)
         {
-            this.HasError = true;
+            this._hasError = true;
 
-            this.ErrorCode = (int)errorCode;
-            var msg = ErrorCodeExtension.GetErrorCodeDescription(errorCode).ErrorCodeDescription;
+            this._errorCode = (int)errorCode;
+            this._errorMessage = ErrorCodeExtension.GetErrorCodeDescription(errorCode).ErrorCodeDescription;
+        }
 
-            if (args.Length == 0)
+        /// <summary>
+        /// 捕捉错误相关信息
+        /// </summary>
+        /// <param name="errorCode">错误编码枚举</param>
+        /// <param name="message">错误信息</param>
+        protected void CacheError(ErrorCode errorCode, string message)
+        {
+            if (string.IsNullOrEmpty(message))
             {
-                this.ErrorMessage = msg;
+                CacheError(errorCode);
             }
             else
             {
-                string placeholder = string.Empty;
-                for (int i = 0; i < args.Length; i++)
-                {
-                    placeholder += "{" + i + "}";
-                }
-                this.ErrorMessage = String.Format(msg + "，Detail：" + placeholder, args);
+                this._hasError = true;
+                this._errorCode = (int)errorCode;
+                this._errorMessage = message;
             }
         }
 
+        /// <summary>
+        /// 重置错误相关信息
+        /// </summary>
         protected void ResetError()
         {
-            this.HasError = false;
-            this.ErrorCode = 0;
-            this.ErrorMessage = null;
+            this._hasError = false;
+            this._errorCode = null;
+            this._errorMessage = null;
         }
 
-        protected void CacheArgumentError(string errorMessage)
-        {
-            CacheError(-100, errorMessage);
-        }
-
-        protected void CacheArgumentIsNullError(string agumentName)
-        {
-            CacheError(-100, string.Format("argument {0} is null", agumentName));
-        }
-
-        protected void CacheNotExistsError(string agumentName, string key)
-        {
-            CacheError(-100, string.Format("{0} doesn't exist:{1}", agumentName, key));
-        }
-
-        protected void CacheEnumAgumentError(string agumentName, int value)
-        {
-            CacheError(-100, string.Format("enum {0} is error, value is {1}", agumentName, value));
-        }
-
-        protected void CacheEnumAgumentError(string agumentName, int? value)
-        {
-            CacheError(-100, string.Format("enum {0} is error, value is {1}", agumentName, value));
-        }
-
+        /// <summary>
+        /// 捕捉子流程错误
+        /// </summary>
+        /// <param name="process"></param>
         protected void CacheSubError(CoreProcess process)
         {
             CacheError(process.GetError().Code, process.GetError().Message);
         }
 
+        /// <summary>
+        /// 获取错误信息
+        /// </summary>
+        /// <returns></returns>
         public ProcessError GetError()
         {
-            if (!HasError)
+            if (HasError)
             {
-                return null;
+                if (!this._errorCode.HasValue || string.IsNullOrEmpty(this._errorMessage))
+                {
+                    throw new ArgumentNullException();
+                }
+                return new ProcessError(this._errorCode.Value, this._errorMessage);
             }
 
-            return new ProcessError(ErrorCode, ErrorMessage);
+            return null;
         }
     }
 }
