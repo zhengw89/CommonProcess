@@ -71,6 +71,7 @@ namespace CommonProcess
                         {
                             throw new InvalidOperationException();
                         }
+                        OnProcessFail();
                         return false;
                     }
                     if (this._directSuccessProcess)
@@ -86,6 +87,7 @@ namespace CommonProcess
             {
                 base.CacheError(-100, "OperateProcess error:" + ex.Message);
                 OnCacheException(ex);
+                OnProcessFail();
                 return false;
             }
             finally
@@ -130,6 +132,13 @@ namespace CommonProcess
         /// 流程执行成功
         /// </summary>
         protected virtual void OnProcessSuccess()
+        {
+
+        }
+        /// <summary>
+        /// 流程执行失败
+        /// </summary>
+        protected virtual void OnProcessFail()
         {
 
         }

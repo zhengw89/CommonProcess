@@ -50,8 +50,6 @@
     <Compile Include="Error\ProcessError.cs" />
     <Compile Include="CoreOperateProcess.cs" />
     <Compile Include="DependentProvider\IDependentProvider.cs" />
-    <Compile Include="OperateProcess.cs" />
-    <Compile Include="OperateProcessWithResult.cs" />
     <Compile Include="ProcessResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryProcess.cs" />

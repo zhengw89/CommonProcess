@@ -64,32 +64,12 @@ namespace CommonProcess
         }
 
         /// <summary>
-        /// 捕捉枚举错误信息
-        /// </summary>
-        /// <param name="agumentName">参数名称</param>
-        /// <param name="value">参数值</param>
-        protected void CacheEnumAgumentError(string agumentName, int value)
-        {
-            CacheError(Error.ErrorCode.ParameterError, string.Format("enum {0} is error, value is {1}", agumentName, value));
-        }
-
-        /// <summary>
         /// 捕捉参数为空错误信息
         /// </summary>
         /// <param name="agumentName">参数名称</param>
         protected void CacheArgumentIsNullError(string agumentName)
         {
             CacheError(Error.ErrorCode.ParameterError, string.Format("argument {0} is null", agumentName));
-        }
-
-        /// <summary>
-        /// 捕捉数据不存在错误信息
-        /// </summary>
-        /// <param name="agumentName">参数名称</param>
-        /// <param name="key">参数值</param>
-        protected void CacheNotExistsError(string agumentName, string key)
-        {
-            CacheError(Error.ErrorCode.NoData, string.Format("{0} doesn't exist:{1}", agumentName, key));
         }
 
         #endregion

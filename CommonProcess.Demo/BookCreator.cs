@@ -1,4 +1,5 @@
 ﻿using System;
+using CommonProcess.Demo.Core;
 using CommonProcess.DependentProvider;
 
 namespace CommonProcess.Demo

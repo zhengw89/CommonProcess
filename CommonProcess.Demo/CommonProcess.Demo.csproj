@@ -44,6 +44,7 @@
     <Compile Include="Book.cs" />
     <Compile Include="BookCreator.cs" />
     <Compile Include="BookRepository.cs" />
+    <Compile Include="Core\OperateProcess.cs" />
     <Compile Include="IBookRepository.cs" />
     <Compile Include="OperateDependentFactory\DependentContainer.cs" />
     <Compile Include="OperateDependentFactory\IDependentContainer.cs" />
